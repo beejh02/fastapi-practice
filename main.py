@@ -1,22 +1,21 @@
-from typing import Union
-from fastapi import FastAPI
+from datetime import datetime
+from typing import List, Union
+
 from pydantic import BaseModel
 
-app = FastAPI()
+class User(BaseModel):
+    id: int
+    name: str = "Joh Doe"
+    signup_ts: Union[datetime, None] = None
+    friends: List[int] = []
 
-class Item(BaseModel):
-    name: str
-    price: float
-    is_offer: Union[bool, None] = None
+exteranl_data = {
+    "id" : "123",
+    "signup_ts" : "2017-06-01 12:22",
+    "friends" : [1, "2", b"3"],
+}
 
-@app.get("/")
-def read_root():
-    return {"Hello : World"}
+user = User(**exteranl_data)
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id" : item_id, "q": q}
-
-@app.put("/items/{item_id}")
-def update_item(item_id: int, item: Item):
-    return {"item_name": item.name, "item_id": item_id}
+print(user)
+print(user.id)
